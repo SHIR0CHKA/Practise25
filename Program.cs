@@ -11,41 +11,96 @@
             this.fractionPart = fractionPart;
         }
 
-        public Fraction Add(Fraction other)
+        public string Add(Fraction other)
         {
             long newWholePart = this.wholePart + other.wholePart;
             ushort newFractionPart;
             if (other.wholePart < 0)
             {
                 newFractionPart = (ushort)(this.fractionPart - other.fractionPart);
+                
+                String thisFracPart = this.fractionPart.ToString();
+                String otherFracPart = other.fractionPart.ToString();
+
+                while (thisFracPart.Length != otherFracPart.Length)
+                {
+                    if (thisFracPart.Length > otherFracPart.Length)
+                    {
+                        otherFracPart = otherFracPart + "0";
+                    }
+                    else
+                    {
+                        thisFracPart = thisFracPart + "0";
+                    }
+                }
+
+                newFractionPart = (ushort)(ushort.Parse(thisFracPart) + ushort.Parse(otherFracPart));
+
+                if (newFractionPart.ToString().Length > Math.Max(thisFracPart.Length, otherFracPart.Length))
+                {
+
+                    newWholePart++;
+                    newFractionPart = (ushort)(newFractionPart - Math.Pow(10, newFractionPart.ToString().Length - 1));
+
+                    string additionalPart = "";
+                    for (int i = -1; i <= (newFractionPart.ToString().Length - otherFracPart.Length); i++)
+                    {
+                        additionalPart += "0";
+                    }
+                    return $"{newWholePart}." + additionalPart + $"{newFractionPart}";
+                }
+                else
+                {
+                    return $"{newWholePart}.{newFractionPart}";
+                }
             }
             else
             {
-                 newFractionPart = (ushort)(this.fractionPart + other.fractionPart);
-                if (newFractionPart >= 100)
+                String thisFracPart = this.fractionPart.ToString();
+                String otherFracPart = other.fractionPart.ToString();
+
+                while (thisFracPart.Length != otherFracPart.Length)
                 {
+                    if (thisFracPart.Length > otherFracPart.Length)
+                    {
+                        otherFracPart = otherFracPart + "0";
+                    }
+                    else {
+                        thisFracPart = thisFracPart + "0";
+                    }
+                }
+
+                newFractionPart = (ushort)(ushort.Parse(thisFracPart) + ushort.Parse(otherFracPart));
+
+                if (newFractionPart.ToString().Length > Math.Max(thisFracPart.Length, otherFracPart.Length)) {
+                    
                     newWholePart++;
-                    newFractionPart -= 100;
+                    newFractionPart = (ushort)(newFractionPart - Math.Pow(10, newFractionPart.ToString().Length - 1));
+                    
+                    string additionalPart = "";
+                    for (int i = -1; i <= (newFractionPart.ToString().Length - otherFracPart.Length); i++)
+                    {
+                        additionalPart += "0";
+                    }
+                    return $"{newWholePart}." + additionalPart + $"{newFractionPart}";
+                } else {
+                    return $"{newWholePart}.{newFractionPart}";
                 }
             }
-            return new Fraction(newWholePart, newFractionPart);
+            
         }
 
-        public override string ToString()
-        {
-            return $"{wholePart}.{fractionPart}";
-        }
 
     }
     internal class Program
     {
         static void Main(string[] args)
         {
-            Fraction num1 = new Fraction(13, 37);
+            Fraction num1 = new Fraction(13, 370);
             Fraction num2 = new Fraction(3, 37);
 
-            Fraction sum = num1.Add(num2);
-            Console.WriteLine(sum.ToString());
+            String sum = num1.Add(num2);
+            Console.WriteLine(sum);
         }
     }
 }
