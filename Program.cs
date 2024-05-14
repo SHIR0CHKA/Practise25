@@ -1,106 +1,93 @@
 ﻿namespace Practise
 {
-    public class Fraction {
-        
+    //класс, описывающий дробное число
+    public class Fraction
+    {
+        //переменная целой части
         private long wholePart;
+        //переменная дробной части
         private ushort fractionPart;
 
+        private double fraction;
+
+
+
+        //конструктор
         public Fraction(long wholePart, ushort fractionPart)
         {
             this.wholePart = wholePart;
             this.fractionPart = fractionPart;
+
+            fraction = double.Parse(wholePart.ToString() + "," + fractionPart.ToString());
         }
 
-        public string Add(Fraction other)
+        //функция сложения
+        public double DAdd(Fraction other)
         {
-            long newWholePart = this.wholePart + other.wholePart;
-            ushort newFractionPart;
-            if (other.wholePart < 0)
-            {
-                newFractionPart = (ushort)(this.fractionPart - other.fractionPart);
-                
-                String thisFracPart = this.fractionPart.ToString();
-                String otherFracPart = other.fractionPart.ToString();
+            return this.fraction + other.fraction;
+        }
 
-                while (thisFracPart.Length != otherFracPart.Length)
-                {
-                    if (thisFracPart.Length > otherFracPart.Length)
+        //функция вычитания
+        public double DSubstact(Fraction other)
+        {
+            return this.fraction - other.fraction;
+        }
+
+        //функция умножения
+        public double DMultiply(Fraction other)
+        {
+            return this.fraction * other.fraction;
+        }
+
+        //функция сравнения
+        public string DCompare(Fraction other)
+        {
+            //обработка условия сравнения
+            switch (this.fraction > other.fraction)
+            {
+                case true:
+                    //вывод если первое число больше второго
+                    return $"Число {this.fraction} больше числа {other.fraction} на {Math.Round(this.fraction - other.fraction, 4)}";
+                    break;
+
+                case false:
+                    if (this.fraction < other.fraction)
                     {
-                        otherFracPart = otherFracPart + "0";
+                        //вывод если второе число больше первого
+                        return $"Число {other.fraction} больше числа {this.fraction} на {Math.Round(other.fraction - this.fraction, 4)}";
                     }
                     else
                     {
-                        thisFracPart = thisFracPart + "0";
+                        //вывод если числа равны
+                        return "Числа равны";
                     }
-                }
-
-                newFractionPart = (ushort)(ushort.Parse(thisFracPart) + ushort.Parse(otherFracPart));
-
-                if (newFractionPart.ToString().Length > Math.Max(thisFracPart.Length, otherFracPart.Length))
-                {
-
-                    newWholePart++;
-                    newFractionPart = (ushort)(newFractionPart - Math.Pow(10, newFractionPart.ToString().Length - 1));
-
-                    string additionalPart = "";
-                    for (int i = -1; i <= (newFractionPart.ToString().Length - otherFracPart.Length); i++)
-                    {
-                        additionalPart += "0";
-                    }
-                    return $"{newWholePart}." + additionalPart + $"{newFractionPart}";
-                }
-                else
-                {
-                    return $"{newWholePart}.{newFractionPart}";
-                }
+                    break;
             }
-            else
-            {
-                String thisFracPart = this.fractionPart.ToString();
-                String otherFracPart = other.fractionPart.ToString();
-
-                while (thisFracPart.Length != otherFracPart.Length)
-                {
-                    if (thisFracPart.Length > otherFracPart.Length)
-                    {
-                        otherFracPart = otherFracPart + "0";
-                    }
-                    else {
-                        thisFracPart = thisFracPart + "0";
-                    }
-                }
-
-                newFractionPart = (ushort)(ushort.Parse(thisFracPart) + ushort.Parse(otherFracPart));
-
-                if (newFractionPart.ToString().Length > Math.Max(thisFracPart.Length, otherFracPart.Length)) {
-                    
-                    newWholePart++;
-                    newFractionPart = (ushort)(newFractionPart - Math.Pow(10, newFractionPart.ToString().Length - 1));
-                    
-                    string additionalPart = "";
-                    for (int i = -1; i <= (newFractionPart.ToString().Length - otherFracPart.Length); i++)
-                    {
-                        additionalPart += "0";
-                    }
-                    return $"{newWholePart}." + additionalPart + $"{newFractionPart}";
-                } else {
-                    return $"{newWholePart}.{newFractionPart}";
-                }
-            }
-            
         }
-
 
     }
     internal class Program
     {
         static void Main(string[] args)
         {
-            Fraction num1 = new Fraction(13, 370);
-            Fraction num2 = new Fraction(3, 37);
+            Console.WriteLine("Введите целую и дробную часть первого числа");
+            //объявление экземпляра класса
+            Fraction num1 = new Fraction(long.Parse(Console.ReadLine()), ushort.Parse(Console.ReadLine()));
 
-            String sum = num1.Add(num2);
-            Console.WriteLine(sum);
+            Console.WriteLine("Введите целую и дробную часть второго числа");
+            //объявление экземпляра класса
+            Fraction num2 = new Fraction(long.Parse(Console.ReadLine()), ushort.Parse(Console.ReadLine()));
+
+            double sum = num1.DAdd(num2);
+            Console.WriteLine($"Сумма равна: {Math.Round(sum, 4)}");
+
+            double substraction = num1.DSubstact(num2);
+            Console.WriteLine($"Разность равна: {Math.Round(substraction, 4)}");
+
+            double mul = num1.DMultiply(num2);
+            Console.WriteLine($"Произведение равно: {Math.Round(mul, 4)}");
+
+            Console.WriteLine(num1.DCompare(num2));
         }
     }
 }
