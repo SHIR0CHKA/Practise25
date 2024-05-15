@@ -18,7 +18,19 @@
             this.wholePart = wholePart;
             this.fractionPart = fractionPart;
 
-            fraction = double.Parse(wholePart.ToString() + "," + fractionPart.ToString());
+            try
+            {
+               fraction = double.Parse(wholePart.ToString() + "," + fractionPart.ToString());
+            }
+            catch (FormatException)
+            {
+               Console.WriteLine("Неверный формат введенных данных.");
+            }
+            catch (OverflowException)
+            {
+               Console.WriteLine("Слишком большое число.");
+            }
+        
         }
 
         //функция сложения
